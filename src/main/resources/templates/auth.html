@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru-RU">
+<link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="/js/jquery.cookie.js"></script>
+<head>
+    <title>Авторизация</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body class="text-center">
+<main class="form-signin w-100 m-auto" style="max-width:330px; padding:15px">
+    <form method="post" action="/auth/enter">
+        <h1 class="h3 mb-3 fw-normal">Авторизируйтесь в системе</h1>
+        <label for="employee">Выбор работника</label>
+        <div class="form-floating mb-3">
+            <select name="employee" id="employee" required style="padding-top: 7px" class="form-select" aria-label=".form-select-lg example">
+                <option></option>
+                <option th:each="el: ${employees}" th:value="${el.employeeId}" th:text="${el.fio}"
+                        onclick="document.location='/auth/' + $(this).attr('value');"
+                        th:selected="${el.employeeId == empId}">
+            </select>
+        </div>
+        <label for="user">Выбор юзера</label>
+        <div class="form-floating mb-3">
+            <select name="user" id="user" required style="padding-top: 7px" class="form-select" aria-label=".form-select-lg example">
+                <option th:each="el2: ${users}" th:value="${el2.userId}" th:text="${el2.username}" />
+            </select>
+        </div>
+        <label for="password">Пароль</label>
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password" placeholder="Password" />
+        </div>
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" value="remember-me"> Запомнить меня
+            </label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+    </form>
+</main>
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>

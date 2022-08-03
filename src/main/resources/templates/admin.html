@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru-RU">
+<link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/custom.css" rel="stylesheet" />
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+<head>
+    <title>Страница администратора</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+<header th:insert="blocks/header :: header"></header>
+<div class="container">
+    <div class="row mt-5">
+        <div class="rounded shadow-sm col-md10 bg-light" style="margin-left:30px">
+            <div class="alert alert-dark">
+                <svg class="bi" width="32" height="32" fill="currentColor">
+                    <use xlink:href="pict/bootstrap-icons.svg#briefcase" />
+                </svg>
+                <i style="text-indent:20px">Заявки пользователей</i>
+            </div>
+            <table class="table usr-reqs" id="requests">
+                <thead>
+                <tr class="table-primary">
+                    <th>ID</th>
+                    <th>Заявка на сервис</th>
+                    <th>Работник</th>
+                    <th>Должность</th>
+                    <th>Отдел</th>
+                    <th>Юзер</th>
+                    <th>Роль</th>
+                    <th>Комментарий</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tr th:each="el : ${requests}">
+                    <td th:text="${el.reqId}" />
+                    <td th:text="${el.context}" />
+                    <td th:text="${el.fio}" />
+                    <td th:text="${el.getEmployees().position}" />
+                    <td th:text="${el.getEmployees().getPositions().name}" />
+                    <td th:text="${el.username}" />
+                    <td th:text="${el.role}" />
+                    <td th:text="${el.coment}" />
+                    <td class="table-light" style="width:120px"><div class="row" style="margin-left:0">
+                        <a class="btn btn-outline-success btn-sm col-4"
+                           data-bs-toggle="tooltip" data-bs-delay="400" data-bs-html="true"
+                           title="<em>Разрешить</em>"
+                           th:href="'/admin/confirm/' + ${el.reqId}">
+                            <svg class="bi" width="32" height="32" fill="currentColor" style="margin-left:-5px">
+                                <use xlink:href="pict/bootstrap-icons.svg#check" />
+                            </svg>
+                        </a>
+                        <a class="btn btn-outline-danger btn-sm col-4"
+                           style="margin-left:15px"
+                           data-bs-toggle="tooltip" data-bs-delay="400" data-bs-html="true"
+                           title="<em>Отклонить</em>"
+                           th:href="'/admin/dismiss/' + ${el.reqId}">
+                            <svg class="bi" width="32" height="32" fill="currentColor" style="margin-left:-5px">
+                                <use xlink:href="pict/bootstrap-icons.svg#x" />
+                            </svg>
+                        </a></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>
+
+<script src="/js/custom.js"></script>

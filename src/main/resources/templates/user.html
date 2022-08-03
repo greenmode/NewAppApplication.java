@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru-RU">
+<link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/css/custom.css" rel="stylesheet" />
+<script src="/js/jquery-3.6.0.min.js"></script>
+<script src="/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+<head>
+    <title>Информация</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+<header th:insert="blocks/header :: header"></header>
+<div class="container">
+    <div class="row mt-5">
+        <div class="rounded shadow-sm col-md-3 bg-light">
+            <div class="alert alert-info">
+                <svg class="bi" width="32" height="32" fill="currentColor">
+                    <use xlink:href="pict/bootstrap-icons.svg#hdd-network" />
+                </svg>
+                <i style="text-indent:20px">Запрос доступа к сервису</i>
+            </div>
+            <div CLASS="alert alert-danger" th:if="${noAccess}">Для этой роли доступ к сервису закрыт!</div>
+            <form class="mt-3" method="post" action="/add_request">
+                <div>
+                    <label for="service" class="form-label">Выберите сервис</label>
+                    <select class="form-select" id="service" name="serviceId" required="">
+                        <option th:each="el : ${allservices}" th:text="${el.context}" th:value="${el.serviceId}" />
+                    </select>
+                    <div class="invalid-feedback">
+                        Неверное значение!
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <label for="role" class="form-label">Выберите доступную роль</label>
+                    <select class="form-select" id="role" name="roleId" required="">
+                        <option th:each="el2 : ${allroles}" th:text="${el2.role}" th:value="${el2.roleId}" />
+                    </select>
+                    <div class="invalid-feedback">
+                        Неверное значение!
+                    </div>
+                </div>
+                <textarea class="form-control mt-3" name="requestComment" maxlength="1000" rows="4" placeholder="Комментарий, если нужно..."></textarea>
+                <div class="mt-3" style="float:right">
+                    <button type="submit" class="btn btn-primary mb-3">Запросить</button>
+                </div>
+            </form>
+        </div>
+        <div class="rounded shadow-sm col-md-8 bg-light" style="margin-left:30px">
+            <div class="alert alert-warning">
+                <svg class="bi" width="32" height="32" fill="currentColor">
+                    <use xlink:href="pict/bootstrap-icons.svg#briefcase" />
+                </svg>
+                <i style="text-indent:20px">Состояния моих заявок</i>
+            </div>
+            <table class="table" id="requests">
+                <thead>
+                <tr class="table-primary">
+                    <th>Заявка</th>
+                    <th>Статус</th>
+                    <th>Действие</th>
+                </tr>
+                </thead>
+                <tr th:each="el3 : ${requests}">
+                    <td th:text="${el3.context}" class="usr-reqs" />
+                    <td th:text="${el3.state}" class="usr-reqs" />
+                    <td class="table-light" style="width:140px"><div class="row" style="margin-left:0">
+                        <a class="btn btn-outline-warning btn-sm col mybtn"
+                                data-bs-toggle="tooltip" data-bs-delay="400" data-bs-html="true"
+                                title="<em>Редактировать</em>"
+                                th:href="'/edit/' + ${el3.reqId}">
+                            <svg class="bi" width="16" height="16" fill="currentColor">
+                                <use xlink:href="pict/bootstrap-icons.svg#pencil-square" />
+                            </svg>
+                        </a>
+                        <a class="btn btn-outline-danger btn-sm col mybtn"
+                                    onclick="confirm('Вы уверены?')"
+                                    data-bs-toggle="tooltip" data-bs-delay="400" data-bs-html="true"
+                                    title="<em>Удалить</em>"
+                                    th:href="'/remove/' + ${el3.reqId}">
+                            <svg class="bi" width="16" height="16" fill="currentColor">
+                                <use xlink:href="pict/bootstrap-icons.svg#trash-fill" />
+                            </svg>
+                        </a>
+                        <a th:if="${el3.stateId==7}" class="btn btn-outline-info btn-sm col mybtn"
+                           data-bs-toggle="tooltip" data-bs-delay="400" data-bs-html="true"
+                           title="<em>Открыть</em>"
+                           th:href="'/service_view/' + ${el3.serviceId}">
+                            <svg class="bi" width="16" height="16" fill="currentColor">
+                                <use xlink:href="pict/bootstrap-icons.svg#box-arrow-in-right" />
+                            </svg>
+                        </a>
+                    </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<footer th:insert="blocks/footer :: footer"></footer>
+</body>
+</html>
+
+<script src="/js/custom.js"></script>
